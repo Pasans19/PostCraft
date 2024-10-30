@@ -10,7 +10,7 @@ requireLogin();
 
 // Fetch news articles from the database
 try {
-    $stmt = $pdo->query("SELECT title, content, created_at FROM news ORDER BY created_at DESC");
+    $stmt = $pdo->query("SELECT title, content, created_at FROM blog ORDER BY created_at DESC");
     $newsArticles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die('Database error: ' . $e->getMessage());

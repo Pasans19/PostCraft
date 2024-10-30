@@ -18,11 +18,11 @@ $errors = [];
 $editMode = false;
 $editNews = ['id' => '', 'title' => '', 'content' => ''];
 
-// Function to fetch news items
-function fetchNews($pdo)
+// Function to fetch blog items
+function fetchBlog($pdo)
 {
     try {
-        $stmt = $pdo->query("SELECT * FROM news");
+        $stmt = $pdo->query("SELECT * FROM blog");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         return ['error' => 'Error fetching news: ' . $e->getMessage()];
@@ -40,86 +40,86 @@ function fetchUsers($pdo)
     }
 }
 
-// Fetch news and users
-$news = fetchNews($pdo);
+// Fetch blog and users
+$blog = fetchBlog($pdo);
 $users = fetchUsers($pdo);
 
-// Check if edit news action is triggered
-if (isset($_GET['action']) && $_GET['action'] === 'edit_news' && isset($_GET['id'])) {
-    $newsId = $_GET['id'];
+// Check if edit blog action is triggered
+if (isset($_GET['action']) && $_GET['action'] === 'edit_blog' && isset($_GET['id'])) {
+    $blogId = $_GET['id'];
 
     try {
-        $stmt = $pdo->prepare("SELECT * FROM news WHERE id = :id");
-        $stmt->execute([':id' => $newsId]);
-        $editNews = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = :id");
+        $stmt->execute([':id' => $blogId]);
+        $editBlog = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($editNews) {
+        if ($editBlog) {
             $editMode = true; // Flag to indicate we are in edit mode
         } else {
-            $errors[] = 'News item not found.';
+            $errors[] = 'Blog item not found.';
         }
     } catch (PDOException $e) {
-        $errors[] = 'Error fetching news for edit: ' . $e->getMessage();
+        $errors[] = 'Error fetching Blog for edit: ' . $e->getMessage();
     }
 }
 
-// Handle add or update news
-if (isset($_POST['add_news']) || isset($_POST['update_news'])) {
+// Handle add or update blog
+if (isset($_POST['add_blog']) || isset($_POST['update_blog'])) {
     $title = trim($_POST['title']);
     $content = trim($_POST['content']);
-    $newsId = $_POST['news_id'] ?? '';
+    $blogId = $_POST['blog_id'] ?? '';
 
     if (empty($title) || empty($content)) {
         $errors[] = 'Title and content are required.';
     }
 
     if (empty($errors)) {
-        if (isset($_POST['update_news']) && $newsId) {
-            // Update news
+        if (isset($_POST['update_blog']) && $blogId) {
+            // Update blog
             try {
-                $stmt = $pdo->prepare("UPDATE news SET title = :title, content = :content WHERE id = :id");
+                $stmt = $pdo->prepare("UPDATE blog SET title = :title, content = :content WHERE id = :id");
                 $stmt->execute([
                     ':title' => $title,
                     ':content' => $content,
-                    ':id' => $newsId
+                    ':id' => $blogId
                 ]);
-                $_SESSION['message'] = 'News updated successfully!';
+                $_SESSION['message'] = 'Blog updated successfully!';
             } catch (PDOException $e) {
                 $errors[] = 'Database error: ' . $e->getMessage();
             }
         } else {
-            // Add new news
+            // Add new blog
             try {
-                $stmt = $pdo->prepare("INSERT INTO news (title, content, created_at) VALUES (:title, :content, NOW())");
+                $stmt = $pdo->prepare("INSERT INTO blog (title, content, created_at) VALUES (:title, :content, NOW())");
                 $stmt->execute([
                     ':title' => $title,
                     ':content' => $content
                 ]);
-                $_SESSION['message'] = 'News added successfully!';
+                $_SESSION['message'] = 'Blog added successfully!';
             } catch (PDOException $e) {
                 $errors[] = 'Database error: ' . $e->getMessage();
             }
         }
 
-        // Redirect after adding or updating news
+        // Redirect after adding or updating blog
         header('Location: admin_dashboard.php');
         exit();
     }
 }
 
-// Handle delete news
-if (isset($_GET['action']) && $_GET['action'] === 'delete_news' && isset($_GET['id'])) {
-    $newsId = $_GET['id'];
+// Handle delete blog
+if (isset($_GET['action']) && $_GET['action'] === 'delete_blog' && isset($_GET['id'])) {
+    $blogId = $_GET['id'];
 
     try {
-        $stmt = $pdo->prepare("DELETE FROM news WHERE id = :id");
-        $stmt->execute([':id' => $newsId]);
-        $_SESSION['message'] = 'News deleted successfully!';
+        $stmt = $pdo->prepare("DELETE FROM blog WHERE id = :id");
+        $stmt->execute([':id' => $blogId]);
+        $_SESSION['message'] = 'Blog deleted successfully!';
     } catch (PDOException $e) {
         $errors[] = 'Database error: ' . $e->getMessage();
     }
 
-    // Redirect after deleting news
+    // Redirect after deleting blog
     header('Location: admin_dashboard.php');
     exit();
 }
@@ -308,22 +308,22 @@ unset($_SESSION['message']); // Clear the message after displaying
         </center>
         <a href="logout.php" class="btn">Logout</a>
 
-        <h2>Manage News</h2>
+        <h2>Manage Blog</h2>
 
         <form method="POST">
-            <input type="hidden" name="news_id" value="<?php echo $editMode ? htmlspecialchars($editNews['id']) : ''; ?>">
+            <input type="hidden" name="blog_id" value="<?php echo $editMode ? htmlspecialchars($editBlog['id']) : ''; ?>">
             <div class="form-group">
                 <label for="title">Title:</label>
-                <input type="text" name="title" value="<?php echo $editMode ? htmlspecialchars($editNews['title']) : ''; ?>" required>
+                <input type="text" name="title" value="<?php echo $editMode ? htmlspecialchars($editBlog['title']) : ''; ?>" required>
             </div>
             <div class="form-group">
                 <label for="content">Content:</label>
-                <textarea name="content" rows="5" required><?php echo $editMode ? htmlspecialchars($editNews['content']) : ''; ?></textarea>
+                <textarea name="content" rows="5" required><?php echo $editMode ? htmlspecialchars($editBlog['content']) : ''; ?></textarea>
             </div>
-            <button type="submit" name="<?php echo $editMode ? 'update_news' : 'add_news'; ?>" class="btn-submit"><?php echo $editMode ? 'Update News' : 'Add News'; ?></button>
+            <button type="submit" name="<?php echo $editMode ? 'update_blog' : 'add_blog'; ?>" class="btn-submit"><?php echo $editMode ? 'Update Blog' : 'Add Blog'; ?></button>
         </form>
 
-        <h2>Current News</h2>
+        <h2>Current Blog</h2>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
                 <tr>
@@ -333,13 +333,13 @@ unset($_SESSION['message']); // Clear the message after displaying
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($news as $item): ?>
+                <?php foreach ($blog as $item): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($item['title']); ?></td>
                         <td><?php echo htmlspecialchars($item['content']); ?></td>
                         <td>
-                            <a href="?action=edit_news&id=<?php echo $item['id']; ?>" class="btn btn-edit">Edit</a>
-                            <a href="?action=delete_news&id=<?php echo $item['id']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this news?');">Delete</a>
+                            <a href="?action=edit_blog&id=<?php echo $item['id']; ?>" class="btn btn-edit">Edit</a>
+                            <a href="?action=delete_blog&id=<?php echo $item['id']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this blog?');">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
