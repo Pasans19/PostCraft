@@ -11,12 +11,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Initialize variables
-$news = [];
+$blog = [];
 $users = [];
 $success = '';
 $errors = [];
 $editMode = false;
-$editNews = ['id' => '', 'title' => '', 'content' => ''];
+$editBlog = ['id' => '', 'title' => '', 'content' => ''];
 
 // Function to fetch blog items
 function fetchBlog($pdo)

@@ -8,13 +8,14 @@ require_once 'config.php';
 // Check if the user is logged in
 requireLogin();
 
-// Fetch news articles from the database
+// Fetch blog articles from the database
 try {
-    $stmt = $pdo->query("SELECT title, content, created_at FROM blog ORDER BY created_at DESC");
+    $stmt = $pdo->query("SELECT title, content, image_url, created_at FROM blog ORDER BY created_at DESC");
     $newsArticles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die('Database error: ' . $e->getMessage());
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -114,12 +115,16 @@ try {
 <div class="header">
     <h1>News Today - User Dashboard</h1>
     <a href="logout.php" class="btn">Logout</a>
+    <a href="add_blog_user.php" class="btn">add blog</a>
 </div>
 
 <div class="container">
     <?php if (!empty($newsArticles)): ?>
         <?php foreach ($newsArticles as $article): ?>
             <div class="news-article">
+                <?php if (!empty($article['image_url'])): ?>
+                    <img src="<?php echo htmlspecialchars($article['image_url']); ?>" alt="Blog Image" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px;">
+                <?php endif; ?>
                 <h2><?php echo htmlspecialchars($article['title']); ?></h2>
                 <p><?php echo nl2br(htmlspecialchars($article['content'])); ?></p>
                 <div class="date">Published on: <?php echo htmlspecialchars($article['created_at']); ?></div>
@@ -129,6 +134,7 @@ try {
         <p>No news articles available.</p>
     <?php endif; ?>
 </div>
+
 
 <div class="footer">
     <p>&copy; <?php echo date('Y'); ?> News Today. All rights reserved.</p>
