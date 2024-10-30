@@ -53,13 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'prasadkau97@gmail.com';
-                $mail->Password = 'jtwo hxnw rqcw muih';
+                $mail->Username = 'ransikameedum@gmail.com';
+                $mail->Password = 'nmsa joez quuy kzqc';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
 
                 // Recipients
-                $mail->setFrom('prasadkau97@gmail.com', 'News Today');
+                $mail->setFrom('ransikameedum@gmail.com', 'PostCraft');
                 $mail->addAddress($email);
 
                 // Content

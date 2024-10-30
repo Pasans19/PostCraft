@@ -93,7 +93,6 @@
 
 <div class="container">
 <div class="image-container">
-        <img src="https://thumbs.dreamstime.com/b/nouvelles-42301371.jpg" alt="News Illustration"> <!-- Replace with your image URL -->
     </div>
     <a href="login.php" class="btn btn-login">Login</a>
     <a href="register.php" class="btn btn-register">Register</a>
