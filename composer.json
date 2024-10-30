@@ -1,0 +1,25 @@
+{
+    "name": "pasans/post-craft",
+    "description": "PostCraft is a Content Management System focused solely on blogging",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pasans\\PostCraft\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "pasans",
+            "email": "ransikameedum@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "phpmailer/phpmailer": "^6.9",
+        "firebase/php-jwt": "^6.10",
+        "monolog/monolog": "^3.7",
+        "robthree/twofactorauth": "^1.8"
+    }
+}
