@@ -28,12 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[] = 'Email is required.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Invalid email format.';
-        }else {
+        } else {
             // Check if the email exists in the database
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute([':email' => $email]);
             $user = $stmt->fetch();
-    
+
             if (!$user) {
                 $errors[] = 'Email does not exist in the system.';
             }
@@ -45,6 +45,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['totp'] = $totp;
             $_SESSION['totp_expiration'] = time() + $totpExpirationTime;
             $_SESSION['email'] = $email;
+
+            // Generate token for password reset
+            $token = bin2hex(random_bytes(16)); // Secure random 32-character token
+            $expiresAt = date("Y-m-d H:i:s", time() + $totpExpirationTime); // Set expiration to 5 minutes
+
+            // Insert the token and expiration into the password_resets table
+            $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
+            $stmt->execute([
+                ':user_id' => $user['id'], // Assuming the user ID is available from the $user fetched earlier
+                ':token' => $token,
+                ':expires_at' => $expiresAt
+            ]);
+
+            // Save token in the session for further use if needed
+            $_SESSION['reset_token'] = $token;
 
             // Send TOTP email
             $mail = new PHPMailer(true);
@@ -302,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function startTimer(duration, display) {
             let timer = duration,
                 minutes, seconds;
-            const interval = setInterval(function() {
+            const interval = setInterval(function () {
                 minutes = parseInt(timer / 60, 10);
                 seconds = parseInt(timer % 60, 10);
 
@@ -321,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Start the timer when the page loads
-        window.onload = function() {
+        window.onload = function () {
             startTimer(timerDuration, timerElement);
         };
     </script>
