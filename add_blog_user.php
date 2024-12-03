@@ -3,7 +3,6 @@
 require 'session.php';
 require 'config.php';
 
-
 // Check if user is logged in and has admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
     header('Location: login.php');
@@ -12,12 +11,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
 
 // Initialize variables
 $blog = [];
-$users = [];
 $success = '';
 $errors = [];
 $editMode = false;
-$editNews = ['id' => '', 'title' => '', 'content' => ''];
-
+$editBlogs = ['id' => '', 'title' => '', 'image_url' => '', 'content' => ''];
 
 // Check if edit blog action is triggered
 if (isset($_GET['action']) && $_GET['action'] === 'edit_blog' && isset($_GET['id'])) {
@@ -68,7 +65,6 @@ if (isset($_POST['add_blog'])) {
     }
 }
 
-
 // Display success message if set
 $message = isset($_SESSION['message']) ? $_SESSION['message'] : '';
 unset($_SESSION['message']); // Clear the message after displaying
@@ -82,42 +78,49 @@ unset($_SESSION['message']); // Clear the message after displaying
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        /* Include internal CSS for styling */
+        /* Dark theme styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #2d2d2d;
+            color: #e1e1e1;
             margin: 0;
             padding: 0;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
+            background-color: #3e3e3e;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
 
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
+        h1,
+        h2 {
+            text-align: center;
+            color: #ffffff;
         }
 
         .alert {
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #28a745;
+            color: #ffffff;
         }
 
         .error {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .button-container {
+            text-align: center;
         }
 
         .btn {
@@ -125,9 +128,9 @@ unset($_SESSION['message']); // Clear the message after displaying
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            color: white;
+            font-weight: bold;
             text-decoration: none;
-            margin-right: 5px;
+            display: inline-block;
         }
 
         .btn-add {
@@ -136,10 +139,12 @@ unset($_SESSION['message']); // Clear the message after displaying
 
         .btn-edit {
             background-color: #ffc107;
+            color: #000;
         }
 
         .btn-delete {
             background-color: #dc3545;
+            color: #fff;
         }
 
         .form-group {
@@ -148,6 +153,7 @@ unset($_SESSION['message']); // Clear the message after displaying
 
         label {
             display: block;
+            color: #cfcfcf;
             margin-bottom: 5px;
             font-weight: bold;
         }
@@ -156,31 +162,25 @@ unset($_SESSION['message']); // Clear the message after displaying
         textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #555;
             border-radius: 5px;
+            background-color: #555;
+            color: #fff;
         }
 
         .btn-submit {
-            padding: 10px 20px;
+            width: 100%;
+            padding: 10px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
         }
 
         .btn-submit:hover {
             background-color: #218838;
-        }
-
-        .error {
-            color: #dc3545;
-            margin-bottom: 20px;
-        }
-
-        .success {
-            color: #28a745;
-            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -201,14 +201,13 @@ unset($_SESSION['message']); // Clear the message after displaying
             </script>
         <?php endif; ?>
 
-        <center>
-            <h1>Add Blog</h1>
-            <div class="form-group">
-                <a href="user_dashboard.php" class="btn btn-delete">Back</a>
-            </div>
-        </center>
+        <h1>Manage Blogs</h1>
 
-        <h2>Manage Blog</h2>
+        <div class="form-group button-container">
+            <a href="user_dashboard.php" class="btn btn-delete">Back to Dashboard</a>
+        </div>
+
+        <h2><?php echo $editMode ? 'Edit Blog' : 'Add Blog'; ?></h2>
 
         <form method="POST">
             <input type="hidden" name="blog_id"
@@ -231,7 +230,9 @@ unset($_SESSION['message']); // Clear the message after displaying
 
             <button type="submit" name="<?php echo $editMode ? 'update_blog' : 'add_blog'; ?>"
                 class="btn-submit"><?php echo $editMode ? 'Update Blog' : 'Add Blog'; ?></button>
+                
         </form>
+        
     </div>
 </body>
 

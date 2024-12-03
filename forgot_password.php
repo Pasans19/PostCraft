@@ -160,90 +160,149 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Reset</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            padding: 20px;
-        }
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
+    .container {
+        max-width: 450px;
+        width: 90%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #764ba2, transparent);
+        animation: loading 2s linear infinite;
+    }
+
+    @keyframes loading {
+        0% { left: -50%; }
+        100% { left: 100%; }
+    }
+
+    h2 {
+        color: #764ba2;
+        font-size: 2em;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .form-group label {
+        color: #764ba2;
+        font-size: 0.9em;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e1e1e1;
+        border-radius: 12px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-group input:focus {
+        border-color: #764ba2;
+        box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+        outline: none;
+    }
+
+    .error {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%);
+        color: #721c24;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        box-shadow: 0 4px 15px rgba(255, 154, 158, 0.2);
+    }
+
+    .success {
+        background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        color: #1a5928;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        box-shadow: 0 4px 15px rgba(132, 250, 176, 0.2);
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+    }
+
+    .timer {
+        text-align: center;
+        color: #764ba2;
+        font-size: 0.9em;
+        margin-top: 15px;
+        font-weight: 500;
+    }
+
+    /* Animation for form transitions */
+    form {
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            padding: 25px;
         }
 
         h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #4a90e2;
+            font-size: 1.5em;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #4a90e2;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: #357abd;
-        }
-
-        .timer {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                width: 90%;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>

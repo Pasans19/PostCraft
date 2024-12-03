@@ -68,11 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - News Today</title>
+    <title>Login - The Daily Digest</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            background-color: #f5faf6;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -80,146 +80,173 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin: 0;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            backdrop-filter: blur(10px);
+        .wrapper {
+            display: flex;
+            width: 800px;
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-section {
+            width: 50%;
+            background-image: url('https://cdn.pixabay.com/photo/2024/02/24/20/55/cards-8594729_1280.jpg');
+            /* Add your image path here */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .form-section {
+            width: 50%;
+            padding: 40px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         h2 {
             margin-bottom: 20px;
-            color: #333;
-            text-align: center;
             font-size: 28px;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #f5faf6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            width: 100%;
         }
 
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #555;
+            color: #ccc;
         }
 
         input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            transition: border-color 0.3s;
+            border: none;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+            font-size: 16px;
         }
 
         input[type="email"]:focus,
         input[type="password"]:focus {
-            border-color: #ff7e5f;
             outline: none;
+            background-color: #555;
         }
 
         .btn {
-            padding: 10px 20px;
-            background-color: #ff7e5f;
+            padding: 12px;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
+            margin-top: 10px;
             width: 100%;
             transition: background-color 0.3s;
         }
 
         .btn:hover {
-            background-color: #feb47b;
+            background-color: #218838;
         }
 
         .btnback {
-            padding: 10px 20px;
-            background-color: #FF5733;
+            padding: 12px;
+            background-color: #dc3545;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
-            width: 100%;
+            margin-top: 30px;
+            /* Increased margin-top */
+            width: 30%;
+            text-align: center;
             transition: background-color 0.3s;
         }
 
         .btnback:hover {
-            background-color: #FFC000;
+            background-color: #c82333;
         }
 
         .link {
             display: block;
             margin-top: 15px;
-            color: #007bff;
+            color: #f8f9fa;
             text-align: center;
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .link:hover {
-            text-decoration: underline;
-            color: #0056b3;
+            color: #adb5bd;
         }
 
         .error {
-            color: #d9534f;
+            color: #f44336;
             font-size: 14px;
-            margin-bottom: 15px;
             text-align: center;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h2>Login</h2>
+    <div class="wrapper">
+        <div class="image-section"></div>
 
-        <!-- Display errors from server-side -->
-        <?php if (!empty($errors)): ?>
-            <div class="error">
-                <?php echo implode('<br>', array_map('htmlspecialchars', $errors)); ?>
-            </div>
-        <?php endif; ?>
+        <div class="form-section">
+            <h2>Login</h2>
 
-        <!-- Display success message -->
-        <?php if ($success): ?>
-            <div class="success">
-                <?php echo htmlspecialchars($success); ?>
-            </div>
-        <?php endif; ?>
+            <!-- Display errors from server-side -->
+            <?php if (!empty($errors)): ?>
+                <div class="error">
+                    <?php echo implode('<br>', array_map('htmlspecialchars', $errors)); ?>
+                </div>
+            <?php endif; ?>
 
-        <form method="POST">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+            <!-- Display success message -->
+            <?php if ($success): ?>
+                <div class="success">
+                    <?php echo htmlspecialchars($success); ?>
+                </div>
+            <?php endif; ?>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn">Login</button><br>
-            </div>
-            
-            <a href="forgot_password.php" class="link">Forgot Password?</a>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <div class="form-group">
-                <a href="logout.php" class="btnback">Back</a>
-            </div>
-        </form>
+                <button type="submit" class="btn">Login</button>
+
+                <a href="forgot_password.php" class="link">Forgot Password?</a>
+
+                <!-- Centered Back Button -->
+                
+            </form>
+            <a href="logout.php" class="btnback">Back</a>
+        </div>
     </div>
 
 </body>

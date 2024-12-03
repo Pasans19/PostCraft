@@ -27,95 +27,104 @@ try {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #2b2b2b; /* Dark background color */
+            color: #ffffff; /* Light text color */
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background-color: #2b2b2b;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            border-bottom: 2px solid #444;
+        }
+
+        .header .btn {
+            padding: 10px 20px;
+            background-color: #4caf50; /* Green button color */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+
+        .header .btn:hover {
+            background-color: #45a049;
         }
 
         .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
             padding: 20px;
-            max-width: 1200px; /* Increased width for better grid layout */
-            margin: auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px; /* Added margin for spacing */
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-            gap: 20px; /* Space between grid items */
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            font-size: 16px;
-            text-decoration: none;
-            background-color: #28a745; /* Green color for the button */
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            margin-bottom: 20px; /* Spacing between the button and articles */
-        }
-
-        .btn:hover {
-            background-color: #218838; /* Darker green on hover */
+            gap: 20px; /* Space between cards */
         }
 
         .news-article {
-            border: 1px solid #007bff; /* Blue border */
-            border-radius: 5px; /* Rounded corners */
-            padding: 15px; /* Padding for content */
-            background-color: #e9f7fd; /* Light blue background for articles */
-            transition: transform 0.3s; /* Animation effect */
+            background-color: #333333; /* Dark card background */
+            border-radius: 10px;
+            overflow: hidden;
+            width: 280px;
+            max-width: 100%;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
         }
 
         .news-article:hover {
-            transform: scale(1.02); /* Slight zoom on hover */
-            background-color: #d1ecf1; /* Darker light blue on hover */
+            transform: scale(1.05);
+        }
+
+        .news-article img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .news-article h2 {
-            margin: 0 0 10px;
-            font-size: 20px; /* Slightly smaller font size for titles */
-            color: #333;
+            font-size: 18px;
+            color: #ffffff;
+            margin: 10px 0;
+            text-align: center;
         }
 
         .news-article p {
-            font-size: 14px; /* Slightly smaller font size for content */
-            color: #666;
-        }
-
-        .news-article .date {
-            font-size: 12px; /* Smaller font size for date */
-            color: #999;
-            margin-top: 10px;
+            font-size: 14px;
+            color: #cccccc;
+            text-align: center;
+            margin: 5px 0;
         }
 
         .footer {
             text-align: center;
             padding: 10px;
-            background-color: #007bff;
-            color: white;
+            background-color: #222;
+            color: #888;
             position: fixed;
             bottom: 0;
             width: 100%;
         }
+
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>News Today - User Dashboard</h1>
+    <h1 style="margin-right: auto;">User Dashboard</h1>
     <a href="logout.php" class="btn">Logout</a>
-    <a href="add_blog_user.php" class="btn">add blog</a>
+    <a href="add_blog_user.php" class="btn">Add Blog</a>
 </div>
 
 <div class="container">
@@ -123,18 +132,16 @@ try {
         <?php foreach ($newsArticles as $article): ?>
             <div class="news-article">
                 <?php if (!empty($article['image_url'])): ?>
-                    <img src="<?php echo htmlspecialchars($article['image_url']); ?>" alt="Blog Image" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px;">
+                    <img src="<?php echo htmlspecialchars($article['image_url']); ?>" alt="Blog Image">
                 <?php endif; ?>
                 <h2><?php echo htmlspecialchars($article['title']); ?></h2>
                 <p><?php echo nl2br(htmlspecialchars($article['content'])); ?></p>
-                <div class="date">Published on: <?php echo htmlspecialchars($article['created_at']); ?></div>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>No news articles available.</p>
+        <p style="color: #aaa; text-align: center;">No news articles available.</p>
     <?php endif; ?>
 </div>
-
 
 <div class="footer">
     <p>&copy; <?php echo date('Y'); ?> News Today. All rights reserved.</p>
